@@ -10,18 +10,18 @@
  * http://opensource.org/licenses/osl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * to license@magentocommerce.com so we can send you a copy immediately.
  *
  * DISCLAIMER
  *
  * Do not edit or add to this file if you wish to upgrade Magento to newer
  * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magento.com for more information.
+ * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Mage
  * @package     Mage_Admin
- * @copyright  Copyright (c) 2006-2015 X.commerce, Inc. (http://www.magento.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright   Copyright (c) 2013 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 
@@ -43,40 +43,12 @@ class Mage_Admin_Model_Session extends Mage_Core_Model_Session_Abstract
     protected $_isFirstPageAfterLogin;
 
     /**
-     * @var Mage_Admin_Model_Redirectpolicy
-     */
-    protected $_urlPolicy;
-
-    /**
-     * @var Mage_Core_Controller_Response_Http
-     */
-    protected $_response;
-
-    /**
-     * @var Mage_Core_Model_Factory
-     */
-    protected $_factory;
-
-    /**
      * Class constructor
      *
      */
-    public function __construct($parameters = array())
+    public function __construct()
     {
-        /** @var Mage_Admin_Model_Redirectpolicy _urlPolicy */
-        $this->_urlPolicy = (!empty($parameters['redirectPolicy'])) ?
-            $parameters['redirectPolicy'] : Mage::getModel('admin/redirectpolicy');
-
-        /** @var Mage_Core_Controller_Response_Http _response */
-        $this->_response = (!empty($parameters['response'])) ?
-            $parameters['response'] : new Mage_Core_Controller_Response_Http();
-
-        /** @var $user Mage_Core_Model_Factory */
-        $this->_factory = (!empty($parameters['factory'])) ?
-            $parameters['factory'] : Mage::getModel('core/factory');
-
         $this->init('admin');
-        $this->logoutIndirect();
     }
 
     /**
@@ -100,21 +72,6 @@ class Mage_Admin_Model_Session extends Mage_Core_Model_Session_Abstract
     }
 
     /**
-     * Logout user if was logged not from admin
-     */
-    protected function logoutIndirect()
-    {
-        $user = $this->getUser();
-        if ($user) {
-            $extraData = $user->getExtra();
-            if (isset($extraData['indirect_login']) && $this->getIndirectLogin()) {
-                $this->unsetData('user');
-                $this->setIndirectLogin(false);
-            }
-        }
-    }
-
-    /**
      * Try to login user in admin
      *
      * @param  string $username
@@ -130,9 +87,10 @@ class Mage_Admin_Model_Session extends Mage_Core_Model_Session_Abstract
 
         try {
             /** @var $user Mage_Admin_Model_User */
-            $user = $this->_factory->getModel('admin/user');
+            $user = Mage::getModel('admin/user');
             $user->login($username, $password);
-            if ($user->getId()) {$this->renewSession();
+            if ($user->getId()) {
+                $this->renewSession();
 
                 if (Mage::getSingleton('adminhtml/url')->useSecretKey()) {
                     Mage::getSingleton('adminhtml/url')->renewSecretUrls();
@@ -141,21 +99,16 @@ class Mage_Admin_Model_Session extends Mage_Core_Model_Session_Abstract
                 $this->setUser($user);
                 $this->setAcl(Mage::getResourceModel('admin/acl')->loadAcl());
 
-                $alternativeUrl = $this->_getRequestUri($request);
-                $redirectUrl = $this->_urlPolicy->getRedirectUrl($user, $request, $alternativeUrl);
-                if ($redirectUrl) {
+                $requestUri = $this->_getRequestUri($request);
+                if ($requestUri) {
                     Mage::dispatchEvent('admin_session_user_login_success', array('user' => $user));
-                    $this->_response->clearHeaders()
-                        ->setRedirect($redirectUrl)
-                        ->sendHeadersAndExit();
+                    header('Location: ' . $requestUri);
+                    exit;
                 }
             } else {
                 Mage::throwException(Mage::helper('adminhtml')->__('Invalid User Name or Password.'));
             }
         } catch (Mage_Core_Exception $e) {
-            $e->setMessage(
-                Mage::helper('adminhtml')->__('You did not sign in correctly or your account is temporarily disabled.')
-            );
             Mage::dispatchEvent('admin_session_user_login_failed',
                 array('user_name' => $username, 'exception' => $e));
             if ($request && !$request->getParam('messageSent')) {
