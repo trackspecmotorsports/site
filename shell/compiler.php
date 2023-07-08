@@ -93,6 +93,10 @@ class Mage_Shell_Compiler extends Mage_Shell_Abstract
             }
         } else if (isset($this->_args['state']) || isset($this->_args['fullstate'])) {
             $compiler = $this->_getCompiler();
+            $compilerConfig = '../includes/config.php';
+            if (file_exists($compilerConfig)) {
+                include $compilerConfig;
+            }
             $status = defined('COMPILER_INCLUDE_PATH') ? 'Enabled' : 'Disabled';
             $state  = $compiler->getCollectedFilesCount() > 0 ? 'Compiled' : 'Not Compiled';
             echo "Compiler Status:          " . $status . "\n";
