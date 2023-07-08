@@ -1,0 +1,6 @@
+<?php if ($this->isConfigured()): ?>
+<script type="text/javascript">
+    console.log('AdRoll track event: pageView', {"segment_name": "magento_order_reviewed"});
+    adroll.track("pageView", {"segment_name": "magento_order_reviewed"});
+</script>
+<?php endif; ?>

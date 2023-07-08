@@ -1,0 +1,206 @@
+/*
+Theme Name: aw2014 Child
+Theme URI: http://demo.qodeinteractive.com/elision/
+Description: A child theme of Elision Theme
+Author: Qode Interactive
+Author URI: http://www.qodeinteractive.com/
+Version: 1.0.0
+Template: aw2014
+*/
+@import url("../aw2014/style.css");
+
+
+.light nav.main_menu > ul > li > a, .light nav.main_menu > ul > li > a:hover, .light nav.main_menu > ul > li.active > a {
+    color: #1c78ba;
+}
+
+.light nav.main_menu > ul > li > a, .light nav.main_menu > ul > li > a:hover a {
+    color: #fff;
+}
+
+
+p {
+	margin-bottom: 12px;
+}
+
+
+p.small {
+    font-size:17px;
+	line-height: 23px;
+	margin-bottom: 10px;
+}
+
+.separator.small {
+    background-color: #000000;
+    display: block;
+    height: 1px;
+    margin: 18px auto 28px;
+    position: relative;
+    width: 150px;
+}
+
+
+.fade {
+   opacity: 1;
+   transition: opacity .25s ease-in-out;
+   -moz-transition: opacity .25s ease-in-out;
+   -webkit-transition: opacity .25s ease-in-out;
+   }
+
+   .fade:hover {
+      opacity: 0.9;
+      }
+	  
+	
+	 a.white {
+    color: #ffffff;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+	 a.white:hover {
+    color: #eaeaea;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.blue {
+   opacity: 1;
+   transition: opacity .25s ease-in-out;
+   -moz-transition: opacity .25s ease-in-out;
+   -webkit-transition: opacity .25s ease-in-out;
+   background-color: #1c78ba;
+   background-repeat:repeat-x;
+   height:600px;
+   max-height:90%;
+   padding:150px;
+   }
+   
+   .blue:hover {
+   background-color: #0b2e49;
+   }
+
+.value-block {
+	background-color: #011a2d;
+	padding: 45px 25px 25px 25px;
+	min-height: 480px;
+	margin-bottom: 10px !important;
+}
+
+.side_menu .widget #searchform input[type="text"], .footer_top .widget.widget_search form input[type="text"] {
+    background-color: transparent;
+    border-bottom: 3px solid #1c78ba;
+    color: #6b89a0;
+    width: 70% !important;
+}
+
+.side_menu .widget #searchform input[type="submit"], .footer_top .widget.widget_search form input[type="submit"] {
+    background-color: #1c78ba;
+    background-image: url("img/search_icon.png");
+    transition: opacity 0.2s ease-in-out 0s;
+    height: 40px;
+}
+.side_menu_button a {
+    font-color: #fff;
+    display: block;
+    font-size: 18px;
+    height: 20px;
+    padding: 0 0 0 14px;
+    position: relative;
+    width: 20px;
+}
+.light .side_menu_button a, .light .side_menu_button a:hover {
+    color: #1c78ba;
+}
+
+.mobile_menu_button span {
+    color: #fff;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+header.sticky .header_bottom {
+    background-color: #efefef;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.11);
+}
+
+/*--------------------------------
+PARALLAX
+----------------------------------*/
+
+.title.has_fixed_background{
+background-size: cover;
+}
+
+.parallax section{
+background-size: cover;
+}
+
+@media only screen and (max-width: 1000px){
+    .parallax section{
+        background-size: cover;
+    }
+}
+
+/*--------------------------------
+GRAVITY FORM
+----------------------------------*/
+textarea,
+input[type='text']{
+    font-family: 'Oswald,sans-serif', 'Roboto';
+    width: 100%;
+    margin-top: 10px !important;
+	margin-bottom: 10px !important;
+    padding: 10px 5px 10px 5px !important;
+    border: 0;
+    outline: 0;
+    resize: none;
+    font-size: 16px !important;
+    background-color:#e2e2e2;
+    color: #777;
+}
+
+textarea:focus,
+input[type='text']:focus{
+    border-color:#00aeef;
+    color:#00aeef;
+    background-color:#efefef;
+}
+
+textarea,
+textarea{
+    width: 97%;
+    padding: 12px 1.5%;
+}
+.gform_wrapper .top_label input.medium, .gform_wrapper .top_label select.medium {
+    width: 100%;
+}
+.gform_wrapper .ginput_complex .ginput_right input[type="text"], .gform_wrapper .ginput_complex .ginput_right input[type="url"], .gform_wrapper .ginput_complex .ginput_right input[type="email"], .gform_wrapper .ginput_complex .ginput_right input[type="tel"], .gform_wrapper .ginput_complex .ginput_right input[type="number"], .gform_wrapper .ginput_complex .ginput_right input[type="password"], .gform_wrapper .ginput_complex .ginput_right select {
+    width: 100% !important;
+}
+
+.gform_wrapper .top_label input.large, .gform_wrapper .top_label select.large, .gform_wrapper .top_label textarea.textarea {
+    width: 100%;
+}
+
+body #gform_wrapper_1 .gform_footer input[type=submit] 
+{
+   font-size: 1.15em;
+	width:100%;
+    background-color: #1c78ba;
+    border: medium none;
+    border-radius: 0;
+    box-shadow: none;
+    color: white;
+    display: inline-block;
+    font-size: 1.125em;
+    font-weight: 400;
+    padding: 7px 18px;
+    text-decoration: none;
+    text-shadow: 0 1px 0 #178d98;
+}
+
+body #gform_wrapper_1 .gform_footer input:hover[type=submit]
+{
+background: #011a2d;
+}

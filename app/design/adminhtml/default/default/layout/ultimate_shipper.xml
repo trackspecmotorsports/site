@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Ultimate_Shipper extension
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ * 
+ * @category       Shipping & Fulfillment
+ * @package        Ultimate_Shipper
+ * @copyright      Copyright (c) 2015
+ * @license        http://opensource.org/licenses/mit-license.php MIT License
+ */
+--> 
+<layout>
+    <adminhtml_shipper_method_index>
+        <reference name="menu">
+            <action method="setActive">
+                <menupath>ultimate_shipper/method</menupath>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="ultimate_shipper/adminhtml_method" name="method" />
+
+        </reference>
+    </adminhtml_shipper_method_index>
+    <adminhtml_shipper_method_grid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="ultimate_shipper/adminhtml_method_grid" name="method_grid"/>
+        </block>
+    </adminhtml_shipper_method_grid>
+    <!-- Method add/edit action -->
+    <adminhtml_shipper_method_edit>
+        <update handle="editor"/>
+        <reference name="menu">
+            <action method="setActive">
+                <menupath>ultimate_shipper/method</menupath>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="ultimate_shipper/adminhtml_method_edit" name="method_edit"></block>
+        </reference>
+        <reference name="left">
+            <block type="ultimate_shipper/adminhtml_method_edit_tabs" name="method_tabs"></block>
+        </reference>
+    </adminhtml_shipper_method_edit>
+
+</layout>

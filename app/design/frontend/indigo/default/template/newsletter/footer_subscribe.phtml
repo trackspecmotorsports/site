@@ -1,0 +1,65 @@
+<?php
+/**
+ * Magento
+ *
+ * @category    design
+ * @package     meigeetheme_default
+ * @copyright   Copyright (c) 2012 MeigeeTeam. (http://www.meigeeteam.com)
+ */
+?>
+
+<div class="block block-subscribe">
+	<form action="<?php echo $this->getFormActionUrl() ?>" method="post" id="footer-newsletter-validate-detail">
+		<div class="block-title">
+			<strong><span><?php echo $this->__('Newsletter') ?></span></strong>
+		</div>
+		<div class="block-content">
+			<label for="footer-newsletter"><?php echo $this->__('Subscribe to the Trackspec mailing list to receive updates on new arrivals, special offers and other discount information.') ?></label>
+			<div class="input-box">
+				<input type="text" name="email" id="footer-newsletter" title="<?php echo $this->__('Sign up for our newsletter') ?>" class="input-text required-entry validate-email" value="<?php echo $this->__('Sign up for our newsletter') ?>" onblur="if (this.value=='') this.value = '<?php echo $this->__('Sign up for our newsletter') ?>'" onfocus="if (this.value=='<?php echo $this->__('Sign up for our newsletter') ?>') this.value = ''" />
+				<button type="submit" title="<?php echo $this->__('Subscribe') ?>" class="button"><span><span><?php echo $this->__('Subscribe') ?></span></span></button>
+				<div class="clear"></div>
+			</div>
+			<div class="footer-captcha-box">
+				<div id="RecaptchaFieldtwo"></div>
+				<input type="hidden" class="validate-reCAPTCHA">
+			</div>
+		</div>
+		
+	</form>
+</div>
+<!-- <script type="text/javascript">
+//<![CDATA[
+	var footerNewsletterSubscriberFormDetail = new VarienForm('footer-newsletter-validate-detail');
+//]]>
+</script>
+ -->
+<script src="https://www.google.com/recaptcha/api.js?onload=CaptchaCallback&render=explicit" async defer></script>
+    <script type="text/javascript">
+        //< ![CDATA[
+            var CaptchaCallback = function() {  
+            grecaptcha.render('RecaptchaFieldtwo', {'sitekey' : '6Ld2Kw8bAAAAAJIzLdCcLCqNL_eo_-BMiSOsUhW_'});
+        };
+        var footerNewsletterSubscriberFormDetail = new VarienForm('footer-newsletter-validate-detail');
+        Validation.add('validate-reCAPTCHA','This is a required field.',function(){
+            var response = grecaptcha.getResponse();
+            if (response.length === 0) {
+                    return false;
+            }
+            return true;
+    });
+        //]]>
+    </script>
+<style type="text/css">
+.footer-captcha-box {
+margin-top: 17px;
+}
+.footer-captcha-box .validation-advice {
+bottom: 17% !important;
+}
+@media (max-width: 576px){
+.footer-captcha-box .validation-advice {
+bottom: 11% !important;
+} 
+}
+</style>

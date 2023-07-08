@@ -1,0 +1,142 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2013 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+ 
+ $_helper = $this->helper('catalog/output');
+ $meigee_indigo_general = MAGE::helper('ThemeOptionsIndigo')->getThemeOptionsIndigo('meigee_indigo_general');
+ $fancybox = $meigee_indigo_general['fancybox'];
+ $helpImg = $this->helper('ThemeOptionsIndigo/images');
+ $random = rand(5, 1500);
+ $labelsoptions = $meigee_indigo_general['productlabels'];
+ $productOnlyXleft = $meigee_indigo_general['productlabels']['labelonlyxleft'];
+ $labelsType = $meigee_indigo_general['productlabels']['labelview'];
+ $labelsPosition = $meigee_indigo_general['productlabels']['labelsposition'];
+?>
+<?php if ($_products = $this->getRecentlyComparedProducts()): ?>
+<div class="widget widget-compared">
+    <header class="widget-title">
+        <h2><?php echo $this->__('Recently Compared') ?></h2>
+    </header>
+    <div class="widget-products">
+        <ol class="products-list<?php echo ' '.$labelsType.' '.$labelsPosition; ?> meigee-widget">
+        <?php $i=0; foreach ($_products as $_product): ?>
+            <li class="item<?php echo (++$i == count($_products))?' last':''; ?><?php if($labelsoptions['labelsorder'] == 'sale_new'):?> labels-sale-new<?php endif; ?>">
+                <?php // Product Image ?>
+				<div class="grid_3 alpha">
+					<div class="product-img-box">
+						<?php echo MAGE::helper('ThemeOptionsIndigo')->getProductLabels($_product, 'new'); ?>
+						<?php if (!MAGE::helper('ThemeOptionsIndigo')->getProductLabels($_product, 'new')) : ?>
+							<div class="no-label-new">
+						<?php endif; ?>
+						<?php if($productOnlyXleft and MAGE::helper('ThemeOptionsIndigo')->getProductOnlyXleft($_product)): ?>
+							<?php echo MAGE::helper('ThemeOptionsIndigo')->getProductOnlyXleft($_product); ?>
+						<?php else: ?>
+							<?php echo MAGE::helper('ThemeOptionsIndigo')->getProductLabels($_product, 'sale'); ?>
+						<?php endif; ?>
+						<?php if (!MAGE::helper('ThemeOptionsIndigo')->getProductLabels($_product, 'new')) : ?>
+							</div>
+						<?php endif; ?>
+						<a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image">
+							<?php /* Hover Image */ echo $helpImg->getHoverImage($_product, 'small_image', 420, null); ?><img <?php echo $helpImg->getImgSources($_product, 'small_image', 420, null); ?> alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
+							<span class="image-box"></span>
+							<?php if(MAGE::helper('ThemeOptionsIndigo')->getProductLabels($_product, 'new') || MAGE::helper('ThemeOptionsIndigo')->getProductLabels($_product, 'sale') || MAGE::helper('ThemeOptionsIndigo')->getProductOnlyXleft($_product)): ?>
+							<span class="label-shadow"></span>
+							<?php endif; ?>
+						</a>
+						<?php // Fancybox
+						if ($fancybox['fancybox_status'] && $fancybox['fancybox_home'] == 1): ?>
+							<a class="fancybox category-gallery" title="<?php echo $_productNameStripped; ?>" href="<?php echo $this->helper('catalog/image')->init($_product, 'small_image'); ?>"><?php echo MAGE::helper('ThemeOptionsIndigo')->getIcon('fancybox'); ?></a>
+						<?php endif; // End Fancybox ?>
+						<?php if(Mage::getStoreConfig('ajax/general/enabledpro')){ ?>
+							<button type="button" title="<?php echo $this->__('Quick View') ?>" class="button btn-quick-view" onclick="showOptions('<?php echo $_product->getId().$random;?>')"><span><span><?php echo MAGE::helper('ThemeOptionsIndigo')->getIcon('quickview'); ?></span></span></button>
+							<a href='<?php echo $this->getUrl('ajax/index/options',array('product_id'=>$_product->getId()));?>' class='ajax-fancybox' id='fancybox<?php echo $_product->getId().$random;?>' style='display:none'>Test</a>
+						<?php } ?>
+					</div>
+				</div>
+				<?php // Product description ?>
+				<div class="<?php if($this->getLayout()->getBlock('root')->getTemplate() == 'page/1column.phtml'){echo 'grid_9';}else{echo 'grid_6';} ?> omega">
+					<div class="product-shop">
+						<h2 class="product-name"><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_productNameStripped; ?>"><?php echo $_helper->productAttribute($_product, $_product->getName() , 'name'); ?></a></h2>
+						<?php if($_product->getRatingSummary()): ?>
+						<?php echo $this->getReviewsSummaryHtml($_product) ?>
+						<?php endif; ?>
+						<div class="clear"></div>
+						<?php echo $this->getPriceHtml($_product, true, '-widget-compared-list') ?>
+						
+						<?php if(!$_product->isSaleable()): ?>
+							<p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+						<?php endif; ?>
+						
+						<div class="desc std">
+							<?php echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
+							<a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_productNameStripped ?>" class="link-learn"><?php echo $this->__('Learn More') ?></a>
+						</div>
+						
+						<?php if($_product->isSaleable()): ?>
+							<?php if(Mage::getStoreConfig('ajax/general/enabledpro')){ ?>
+								<?php if ( !($_product->getTypeInstance(true)->hasRequiredOptions($_product) || $_product->isGrouped() || $_product->isConfigurable()) ): ?>
+									<div class="button-holder">
+										<button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocationAjax('<?php echo $this->getAddToCartUrl($_product) ?>','<?php echo $_product->getId().$random;?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
+										<span id='ajax_loader<?php echo $_product->getId().$random;?>' class="ajax-loader-item" style='display:none'><img src='<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif')?>' alt='' /></span>
+									</div>
+								<?php else: ?>
+									<div class="button-holder">
+										<button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button" onclick="showOptions('<?php echo $_product->getId().$random;?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
+										<a href='<?php echo $this->getUrl('ajax/index/options',array('product_id'=>$_product->getId()));?>' class='ajax-fancybox' id='fancybox<?php echo $_product->getId().$random;?>' style='display:none'>Test</a>
+									</div>
+								<?php endif; ?>
+							<?php }else{ ?>
+								 <p><button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button></p>
+							<?php } ?>
+						<?php endif; ?>
+						<div class="clear"></div>
+						<?php if(Mage::getStoreConfig('ajax/wishlistcompare/enabledpro')){?>
+						 <ul class="add-to-links">
+							<?php if ($this->helper('wishlist')->isAllow()) : ?>
+								<li><a href="#" onclick='ajaxWishlist("<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>","<?php echo $_product->getId().$random;?>");return false;' class="link-wishlist"><?php echo MAGE::helper('ThemeOptionsIndigo')->getIcon('wishlist'); ?><?php echo $this->__('Add to Wishlist') ?><span id='ajax_wishlist_loading<?php echo $_product->getId().$random;?>' class="ajax-loader-item" style='display:none'><img src='<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif')?>' alt='' /></span></a></li>
+							<?php endif; ?>
+							<?php if($_compareUrl=$this->getAddToCompareUrl($_product)): ?>
+								<li><span class="separator">|</span> <a href="#" onclick='ajaxCompare("<?php echo $_compareUrl ?>","<?php echo $_product->getId().$random;?>");return false;' class="link-compare"><?php echo MAGE::helper('ThemeOptionsIndigo')->getIcon('compare'); ?><?php echo $this->__('Add to Compare') ?><span id='ajax_loading<?php echo $_product->getId().$random;?>' class="ajax-loader-item" style='display:none'><img src='<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif')?>' alt='' /></span></a></li>
+							<?php endif; ?>
+						</ul>
+						<?php }else{?>
+						<ul class="add-to-links">
+							<?php if ($this->helper('wishlist')->isAllow()) : ?>
+								<li><a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" class="link-wishlist"><?php echo MAGE::helper('ThemeOptionsIndigo')->getIcon('wishlist'); ?><?php echo $this->__('Add to Wishlist') ?></a></li>
+							<?php endif; ?>
+							<?php if($_compareUrl=$this->getAddToCompareUrl($_product)): ?>
+								<li><span class="separator">|</span> <a href="<?php echo $_compareUrl ?>" class="link-compare"><?php echo MAGE::helper('ThemeOptionsIndigo')->getIcon('compare'); ?><?php echo $this->__('Add to Compare') ?></a></li>
+							<?php endif; ?>
+							  </ul>
+						<?php } ?>
+						<p class="email-friend"><a href="<?php echo $this->helper('catalog/product')->getEmailToFriendUrl($_product) ?>"><?php echo MAGE::helper('ThemeOptionsIndigo')->getIcon('emailfiend'); ?><?php echo $this->__('Email to a Friend') ?></a></p>
+					</div>
+				</div>
+            </li>
+        <?php endforeach; ?>
+        </ol>
+    </div>
+</div>
+<?php endif; ?>
