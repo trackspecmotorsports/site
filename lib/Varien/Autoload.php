@@ -86,7 +86,12 @@ class Varien_Autoload
         if ($this->_isIncludePathDefined) {
             $classFile =  COMPILER_INCLUDE_PATH . DIRECTORY_SEPARATOR . $class;
         } else {
-            $classFile = str_replace(' ', DIRECTORY_SEPARATOR, ucwords(str_replace('_', ' ', $class)));
+            $classFile = str_replace(' ', DIRECTORY_SEPARATOR, ucwords(str_replace('_', ' ',
+				# 2023-07-10 Dmitrii Fediuk https://upwork.com/fl/mage2pro
+				# 1) «Support PHP namespaces»: https://github.com/trackspecmotorsports/site/issues/28
+				# 2) I have already implemented the same solution in https://github.com/itsapiece
+				str_replace('\\', '/', $class)
+			)));
         }
         $classFile.= '.php';
         //echo $classFile;die();
